@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  db:
+    container_name: database
+    image: postgres
+    volumes:
+       - postgres:/data/postgres
+    env_file:
+      - ./.env
+    ports:
+      - "${DBPORT}:5432"
+  pgadmin:
+    container_name: pgadmin-container
+    image: dpage/pgadmin4
+    env_file:
+      - ./.env
+    ports:
+      - "${PGADMINPORT}:80"
+  app:
+    container_name: python-app
+    build:
+      context: ./services/app
+      dockerfile: Dockerfile
+    command: python app.py
+    volumes:
+      - ./services/app/:/app/
+      - ./services/dataset/:/data/dataset/
+    env_file:
+      - ./.env
+volumes:
+    postgres:
+    pgadmin:
