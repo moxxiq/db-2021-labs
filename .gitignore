@@ -1,6 +1,3 @@
-# Dataset gitignore
-*/services/dataset/*.csv
-
 ## Pyhton .gitignore
 # Byte-compiled / optimized / DLL files
 __pycache__/
