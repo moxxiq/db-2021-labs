@@ -15,7 +15,7 @@ def list_files(startpath):
 
 def main():
     print("I'm working")
-    with open('struct.txt', 'w') as f:
+    with open('../output/struct.txt', 'w') as f:
         f.write("\n".join(list_files('/data/')))
 
 

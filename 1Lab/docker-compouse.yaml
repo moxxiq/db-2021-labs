@@ -25,6 +25,7 @@ services:
     volumes:
       - ./services/app/:/app/
       - ./services/dataset/:/data/dataset/
+      - ./services/output/:/output/
     env_file:
       - ./.env
 volumes:
