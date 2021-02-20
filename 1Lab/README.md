@@ -9,7 +9,7 @@
 
 ### Setting up the environment
 
-[.env](../blob/master/.env) file with configuration environment variables
+[.env](./.env.test) file with configuration environment variables
 
 ### How to run
 #### Step 1. Clone the repository with:
