@@ -1,22 +1,18 @@
 import psycopg2
-import os
-
-
-def list_files(startpath):
-    # copy-pastle
-    for root, dirs, files in os.walk(startpath):
-        level = root.replace(startpath, '').count(os.sep)
-        indent = ' ' * 4 * (level)
-        yield '{}{}/'.format(indent, os.path.basename(root))
-        subindent = ' ' * 4 * (level + 1)
-        for f in files:
-            yield '{}{}'.format(subindent, f)
+import time
+import csv
+from config import datasets
 
 
 def main():
-    print("I'm working")
-    with open('../output/struct.txt', 'w') as f:
-        f.write("\n".join(list_files('/data/')))
+    for year, path in datasets.items():
+        # load csv files
+        with open(path, encoding='cp1251') as dataset:
+            start_time = time.time()
+            datasets[year] = csv.DictReader(dataset, delimiter=';')
+            # just print header (keys of the dictionary)
+            print(tuple(next(datasets[year])))
+            print("csv.DictReader took %s seconds" % (time.time() - start_time))
 
 
 if __name__ == '__main__':
