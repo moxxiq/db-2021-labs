@@ -18,7 +18,7 @@
 git clone https://github.com/noasck/grechka_price_tracker.git
 ```
 
-#### Step 2. Put datasets into `/services/dataset/` folder:
+#### Step 2. Put datasets into `/dataset/` folder:
    Files from https://zno.testportal.com.ua/opendata
    like `Odata2020File.csv`
 
@@ -28,7 +28,7 @@ git clone https://github.com/noasck/grechka_price_tracker.git
 docker-compose -f docker-compouse.yaml up --build
 ```
 
-#### Result files will be in `/services/output/`
+#### Result files will be in `/output/`
 
 Tip: to rebuild only 1 service you need to
 ``` bash
