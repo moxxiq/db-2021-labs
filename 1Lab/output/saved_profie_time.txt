@@ -1,0 +1,15 @@
+
+create_table(drop_if_exists=True)
+Time 0.018 s
+
+copy_dataframe()
+Time 175.8 s
+
+copy_dataframe()
+Time 208.6 s
+
+get_min_phys_2019_2020()
+Time 1.05 s
+
+main()
+Time 385.5 s

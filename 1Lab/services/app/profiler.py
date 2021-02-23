@@ -1,11 +1,11 @@
 import time
 from functools import wraps
 from memory_profiler import memory_usage
-from config import output_folder
+from config import output_folder, profile_time_filename
 
-profile_time_filename = 'profie_time.log'
 with open(output_folder + profile_time_filename, 'w'):
     pass
+
 
 def profile_time(fn):
     @wraps(fn)

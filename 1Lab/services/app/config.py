@@ -2,7 +2,11 @@ import os
 import glob
 
 # year: filepath
-datasets = dict((path[-12:-8], path) for path in glob.glob('../data/dataset/*.csv'))
+datasets_files = '../data/dataset/*.csv'
+test_files = '../data/dataset/test*.csv'
+datasets = dict((path[-12:-8], path) for path in glob.glob(
+    datasets_files
+))
 
 # connection to DB
 POSTGRES_DB = os.getenv('POSTGRES_DB')
@@ -13,3 +17,5 @@ DBPORT = os.getenv('DBPORT')
 DATABASE_NETWORK = os.getenv('DATABASE_NETWORK')
 
 output_folder = '../output/'
+
+profile_time_filename = 'profie_time.txt'
