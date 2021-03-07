@@ -13,7 +13,7 @@ def from_csv_to_database(table_name):
         with open(path, encoding='cp1251') as dataset:
             datasets[year] = csv.DictReader(dataset, delimiter=';')
             print(f"Year {year} is loading")
-            # database.copy_dataframe(datasets[year], year, size=32768)
+            # database.copy_dataframe(datasets[year], year, size=32768, table_name=table_name)
             database.exec_values(datasets[year], year, size=32768, table_name=table_name)
 
 

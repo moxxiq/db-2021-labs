@@ -207,7 +207,7 @@ def create_table(table_name='odata', drop_if_exists=True) -> None:
 
     odata_drop_query = f"DROP TABLE IF EXISTS {table_name};"
 
-    odata_create_query = "CREATE TABLE IF NOT EXISTS odata ("
+    odata_create_query = f"CREATE TABLE IF NOT EXISTS {table_name} ("
     odata_create_query += ", ".join(f'{col} {t}' for col, t in table_columns_types.items())
     odata_create_query += ");"
     with connection.cursor() as cursor:
@@ -218,10 +218,10 @@ def create_table(table_name='odata', drop_if_exists=True) -> None:
 
 
 @profile_time
-def copy_dataframe(df: Iterator[Dict[str, Any]], year: int, size=1024):
+def copy_dataframe(df: Iterator[Dict[str, Any]], year: int, size=1024, table_name='odata'):
     csv_file_like_object = make_csv(df, year)
     with connection.cursor() as cursor:
-        cursor.copy_from(csv_file_like_object, 'odata', sep='|', null='null', size=size)
+        cursor.copy_from(csv_file_like_object, table_name, sep='|', null='null', size=size)
 
 
 def clean_dict_df(df: Iterator[Dict[str, Any]]) -> Iterator[Tuple[str]]:
