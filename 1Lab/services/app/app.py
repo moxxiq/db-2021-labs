@@ -28,8 +28,13 @@ def to_csv(header, rows):
 
 @profile_time
 def main():
-    database.create_table(drop_if_exists=True)
-    from_csv_to_database()
+    database.create_table(table_name='odata', drop_if_exists=False)
+    try:
+        from_csv_to_database()
+    except (database.interface_error, database.operational_error) as e:
+        print(e)
+        print("Data not fully loaded. Please, try again")
+        exit()
     to_csv(*database.get_min_phys_2019_2020())
 
 

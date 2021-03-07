@@ -1,15 +1,21 @@
 import psycopg2
+import psycopg2.extras
 from config import POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, DBPORT, DATABASE_NETWORK
 from profiler import profile_time
 import io
 import re
+from itertools import islice
+from math import ceil
 # type hinting
 from typing import Any, Optional, Dict, Iterator, Tuple
 from decimal import Decimal
 
+# Exception
+interface_error = psycopg2.InterfaceError
+operational_error = psycopg2.OperationalError
 
 table_columns_types = {
-    "OUTID": "varchar(36)",
+    "OUTID": "varchar(36) PRIMARY KEY",
     "Birth": "smallint",
     "SEXTYPENAME": "sex",
     "REGNAME": "TEXT",
