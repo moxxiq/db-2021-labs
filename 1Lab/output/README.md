@@ -34,3 +34,8 @@ CPU:       Info: Quad Core model: Intel Core i5-8300H bits: 64 type: MT MCP L2 c
 SSD: nvme0: Samsung model: MZVLB256HAHQ-000H1
 RAM: total: 15.52 GiB
 ```
+### Quick summary of testing database crash
+Database and the python script were run by docker compose.
+After some time a database was forcibly stopped by `docker kill database` command, command `docker stop database` was tested too but in that case, Docker tried to exit gracefully so that we can't really test the transaction commits.
+
+The python script cached exception of the previous event and closed with code 0. The next run of it was much faster because it skipped already inserted blocks and continued to insert only absent records. Time lasted on running insert was 65.1881451 s that is much faster than insert with an empty database - 171.99037 s
