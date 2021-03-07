@@ -2,7 +2,7 @@
 * [result.csv](./result.csv) csv file with sql query results according to the individual task
 * [saved_profie_time.txt](./saved_profie_time.txt) local time measurments of queries
   * create_table - time spent on creating the table
-  * copy_dataframe (first) - time spent on copying data from Odata2019File.csv
+  * copy_dataframe (first) - time spent on copying data from Odata2019File.csv (in general order doesn't allways be the same)
   * copy_dataframe (second) - time spent on copying data from Odata2020File.csv
   * get_min_phys_2019_2020 - time spent on getting task query
   * main() - all program work time
