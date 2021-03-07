@@ -2,10 +2,12 @@ import os
 import glob
 
 # year: filepath
-datasets_files = '../data/dataset/*.csv'
+datasets_files = '../data/dataset/Odata*.csv'
 test_files = '../data/dataset/test*.csv'
 datasets = dict((path[-12:-8], path) for path in glob.glob(
     datasets_files
+    # testing
+    # test_files
 ))
 
 # connection to DB
