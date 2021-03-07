@@ -1,0 +1,12 @@
+
+create_table(table_name=odata, drop_if_exists=False)
+Time 0.001595927 s
+
+exec_values(size=32768)
+Time 0.3611439 s
+
+exec_values(size=32768)
+Time 52.22071 s
+
+main()
+Time 52.58524 s
