@@ -3,7 +3,9 @@ from functools import wraps
 from memory_profiler import memory_usage
 from config import output_folder, profile_time_filename
 
+# WARNING: Implicit run
 with open(output_folder + profile_time_filename, 'w'):
+    # clear profile log from previous run
     pass
 
 
@@ -18,7 +20,7 @@ def profile_time(fn):
             t = time.perf_counter()
             retval = fn(*args, **kwargs)
             elapsed = time.perf_counter() - t
-            profile_log.write(f'Time {elapsed:0.4} s\n')
+            profile_log.write(f'Time {elapsed:0.7} s\n')
             return retval
 
     return inner

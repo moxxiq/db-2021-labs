@@ -36,7 +36,7 @@ table_columns_types = {
     "UkrBall100": "numeric",
     "UkrBall12": "numeric",
     "UkrBall": "numeric",
-    "UkrAdaptScale": "numeric",
+    "UkrAdaptScale": "int",
     "UkrPTName": "TEXT",
     "UkrPTRegName": "TEXT",
     "UkrPTAreaName": "TEXT",
@@ -144,6 +144,15 @@ table_columns_types = {
     "year": "smallint",
 }
 
+ball_keys = [
+    'UkrBall100', 'UkrBall12', 'UkrBall', 'histBall100', 'histBall12',
+    'histBall', 'mathBall100', 'mathBall12', 'mathBall', 'physBall100',
+    'physBall12', 'physBall', 'chemBall100', 'chemBall12', 'chemBall',
+    'bioBall100', 'bioBall12', 'bioBall', 'geoBall100', 'geoBall12',
+    'geoBall', 'engBall100', 'engBall12', 'engBall', 'fraBall100',
+    'fraBall12', 'fraBall', 'deuBall100', 'deuBall12', 'deuBall',
+    'spaBall100', 'spaBall12', 'spaBall'
+]
 
 def clean_csv_value(value: Optional[Any]) -> str:
     if value is None:
@@ -156,6 +165,9 @@ def clean_csv_value(value: Optional[Any]) -> str:
 
 
 def make_csv(df: Iterator[Dict[str, Any]], year: int) -> io.StringIO:
+    """
+    Make streaming string with corrections from csv.DictReader dataset
+    """
     csv_file = io.StringIO()
     for row in df:
         # print('|'.join(map(clean_csv_value, (*row.values(), year)))
@@ -177,7 +189,7 @@ connection.autocommit = True
 
 
 @profile_time
-def create_table(drop_if_exists=True) -> None:
+def create_table(table_name='odata', drop_if_exists=True) -> None:
     """
     Create table with prepared structure
     """
@@ -193,7 +205,7 @@ def create_table(drop_if_exists=True) -> None:
         END
         $$;"""
 
-    odata_drop_query = "DROP TABLE IF EXISTS odata;"
+    odata_drop_query = f"DROP TABLE IF EXISTS {table_name};"
 
     odata_create_query = "CREATE TABLE IF NOT EXISTS odata ("
     odata_create_query += ", ".join(f'{col} {t}' for col, t in table_columns_types.items())
@@ -206,10 +218,51 @@ def create_table(drop_if_exists=True) -> None:
 
 
 @profile_time
-def copy_dataframe(df: Iterator[Dict[str, Any]], year: int):
+def copy_dataframe(df: Iterator[Dict[str, Any]], year: int, size=1024):
     csv_file_like_object = make_csv(df, year)
     with connection.cursor() as cursor:
-        cursor.copy_from(csv_file_like_object, 'odata', sep='|', null='null')
+        cursor.copy_from(csv_file_like_object, 'odata', sep='|', null='null', size=size)
+
+
+def clean_dict_df(df: Iterator[Dict[str, Any]]) -> Iterator[Tuple[str]]:
+    for row in df:
+        for k in ball_keys:
+            row[k] = row[k].replace(',', '.')
+        for k, v in row.items():
+            if len(v) == 0 or v == 'null':
+                row[k] = None
+        yield tuple(row.values())
+
+
+@profile_time
+def exec_values(df: Iterator[Dict[str, Any]], year: int, size=1024, table_name='odata'):
+    year_count = {
+        '2019': 353813,
+        '2020': 379299
+    }
+    year_count_query = f"select count(*) from {table_name} where year = {str(year)};"
+    query = f"insert into {table_name} values %s ON CONFLICT DO NOTHING;"
+    template = "(" + ", ".join(['%s'] * (len(table_columns_types) - 1)) + f", {str(year)})"
+    cleaned_df_values = clean_dict_df(df)
+    with connection.cursor() as cursor:
+        # if all records of current year is present, we skip insertion
+        cursor.execute(year_count_query)
+        count = cursor.fetchone()[0]
+        # considering inserting with permanent `batch` size, regarding wrong lines in csv
+        if count == year_count.get(year):
+            return
+        else:
+            blocks_to_skip = ceil(count / size) * size
+            print(f"Skiping existing blocks {blocks_to_skip}, existing count = {count}")
+            cleaned_df_values = islice(cleaned_df_values, blocks_to_skip, None)
+
+        psycopg2.extras.execute_values(
+            cur=cursor,
+            sql=query,
+            argslist=cleaned_df_values,
+            template=template,
+            page_size=size
+        )
 
 
 @profile_time
