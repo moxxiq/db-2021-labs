@@ -15,7 +15,8 @@
 #### Step 1. Clone the repository with:
 
 ``` bash
-git clone https://github.com/noasck/grechka_price_tracker.git
+git clone https://github.com/moxxiq/db-2021-labs.git
+cd db-2021-labs/1Lab
 ```
 
 #### Step 2. Put datasets into [`/dataset/`](./dataset/) folder:
