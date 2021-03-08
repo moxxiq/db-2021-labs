@@ -11,6 +11,11 @@
 
 [.env](./.env.test) file with configuration environment variables
 
+to simply run you can just
+``` bash
+cp .env.test .env
+```
+
 ### How to run
 #### Step 1. Clone the repository with:
 
@@ -35,3 +40,5 @@ Tip: to rebuild only 1 service you need to
 ``` bash
 docker-compose -f docker-compouse.yaml up --detach --build {service-name}
 ```
+
+#### Translated condition in [`TASK.md`](./TASK.md)
