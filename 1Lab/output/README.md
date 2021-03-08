@@ -60,7 +60,7 @@ Thr difference in speed with different 'batch sizes' (size) not so big and size 
 Here you can see system monitor screenshots
 
 #### Size = 8192
-![RAM usage](smalbatch_RAM.png?raw=true "RAM usage")
-![Hard disk usage](smalbatch_disk.png?raw=true "Hard disk usage")
+![RAM usage](smalbatch_RAM.png "RAM usage")
+![Hard disk usage](smalbatch_disk.png "Hard disk usage")
 #### Size = 32768
-![RAM usage](bigbatch_RAM.png?raw=true "RAM usage")
+![RAM usage](bigbatch_RAM.png "RAM usage")
