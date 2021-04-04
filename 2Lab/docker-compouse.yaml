@@ -1,4 +1,4 @@
-version: "3.9"
+xversion: "3.9"
 services:
   db:
     container_name: "${DATABASE_NETWORK}"
@@ -30,6 +30,19 @@ services:
       - ./services/flyway/sql:/flyway/sql
     depends_on:
       - db
+  app:
+    container_name: python-app
+    build:
+      context: ./services/app
+      dockerfile: Dockerfile
+    command: python app.py
+    volumes:
+      - ./services/app/:/app/
+      - ./output/:/output/
+    env_file:
+      - ./.env
+    depends_on:
+      - flyway
 volumes:
     postgres:
     pgadmin:
