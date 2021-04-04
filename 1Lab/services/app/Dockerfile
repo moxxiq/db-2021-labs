@@ -9,4 +9,4 @@ RUN apt-get update && pip install --upgrade pip && apt install --no-install-reco
 COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
-COPY . /app/
+COPY ./*.py /app/
