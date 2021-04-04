@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  db:
+    container_name: "${DATABASE_NETWORK}"
+    image: postgres
+    volumes:
+       - postgres:/data/postgres
+    env_file:
+      - ./.env
+    ports:
+      - "${DBPORT}:5432"
+  pgadmin:
+    container_name: pgadmin-container
+    image: dpage/pgadmin4
+    env_file:
+      - ./.env
+    ports:
+      - "${PGADMINPORT}:80"
+  flyway:
+    container_name: flyway-migration
+    environment:
+      - FLYWAY_USER=${POSTGRES_USER}
+      - FLYWAY_PASSWORD=${POSTGRES_PASSWORD}
+      - FLYWAY_URL=jdbc:postgresql://postgres:${DBPORT}/${POSTGRES_DB}
+      - FLYWAY_SCHEMAS=flyway,public
+      - FLYWAY_GROUP=true
+    image: flyway/flyway
+    command: -locations=filesystem:/flyway/sql -connectRetries=60 migrate
+    volumes:
+      - ./services/flyway/sql:/flyway/sql
+    depends_on:
+      - db
+volumes:
+    postgres:
+    pgadmin:
