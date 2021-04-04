@@ -25,8 +25,8 @@ services:
       - FLYWAY_PASSWORD=${POSTGRES_PASSWORD}
       - FLYWAY_URL=jdbc:postgresql://${DATABASE_NETWORK}:${DBPORT}/${POSTGRES_DB}
       - FLYWAY_SCHEMAS=public
-      - FLYWAY_GROUP=true
-      - FLYWAY_BASELINE_ON_MIGRATE=true
+      - FLYWAY_GROUP=true # all or none migrations
+      - FLYWAY_BASELINE_ON_MIGRATE=true # to make possible migration on public schema
     image: flyway/flyway:7
     command: -locations=filesystem:/flyway/sql -connectRetries=60 migrate
     volumes:
