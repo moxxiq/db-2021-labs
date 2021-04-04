@@ -10,7 +10,7 @@ services:
     ports:
       - "${DBPORT}:5432"
   pgadmin:
-    container_name: pgadmin-container
+    container_name: pgadmin-container-flyway
     image: dpage/pgadmin4
     env_file:
       - ./.env
@@ -18,20 +18,23 @@ services:
       - "${PGADMINPORT}:80"
   flyway:
     container_name: flyway-migration
+    env_file:
+      - ./.env
     environment:
       - FLYWAY_USER=${POSTGRES_USER}
       - FLYWAY_PASSWORD=${POSTGRES_PASSWORD}
-      - FLYWAY_URL=jdbc:postgresql://postgres:${DBPORT}/${POSTGRES_DB}
-      - FLYWAY_SCHEMAS=flyway,public
+      - FLYWAY_URL=jdbc:postgresql://${DATABASE_NETWORK}:${DBPORT}/${POSTGRES_DB}
+      - FLYWAY_SCHEMAS=public
       - FLYWAY_GROUP=true
-    image: flyway/flyway
+      - FLYWAY_BASELINE_ON_MIGRATE=true
+    image: flyway/flyway:7
     command: -locations=filesystem:/flyway/sql -connectRetries=60 migrate
     volumes:
       - ./services/flyway/sql:/flyway/sql
     depends_on:
       - db
   app:
-    container_name: python-app
+    container_name: python-app-flyway
     build:
       context: ./services/app
       dockerfile: Dockerfile
@@ -45,4 +48,7 @@ services:
       - flyway
 volumes:
     postgres:
+      #external: true
+      name: postgres
     pgadmin:
+      name: pgadmin 
