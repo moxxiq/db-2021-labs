@@ -10,7 +10,7 @@ BEGIN
 END
 $$; 
 
-create table odata
+create table if not exists odata
 (
     outid            varchar(36) not null
         constraint odata_pkey
