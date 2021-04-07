@@ -1,7 +1,7 @@
-drop table if exists participant, place, eduinst, test, participant_place, eduinst cascade;
-drop type if exists classlang, teststatus;
+drop table if exists participant, place, eduinst, test, participant_place, eduinst, place_type cascade;
+drop type if exists lang, teststatus cascade;
 
-CREATE TYPE classlang AS ENUM (
+CREATE TYPE lang AS ENUM (
     'українська', 'інша', 'польська', 'угорська', 'російська', 'молдовська', 'румунська');
 
 CREATE TYPE teststatus AS ENUM (
@@ -15,18 +15,18 @@ CREATE TABLE participant
     sextypename      sex                   NOT NULL,
     regtypename      text                  NOT NULL,
     classprofilename text,
-    classlangname    classlang,
+    classlangname    lang,
     year             smallint              NOT NULL
 );
 
 CREATE TABLE place
 (
-    regname     text,
-    areaname    text,
-    tername     text,
-    tertypename text,
-    placeid     serial
-        constraint place_pkey primary key
+    regname  text,
+    areaname text,
+    tername  text,
+    placeid  serial
+        constraint place_pkey primary key,
+    unique (regname, areaname, tername)
 );
 
 CREATE TABLE eduinst
@@ -47,13 +47,14 @@ CREATE TABLE test
     ball12            numeric,
     ball              numeric,
     adaptscale        integer,
-    lang              text,
+    langname          lang,
     testid            serial
         constraint test_pkey primary key,
     participant_outid character varying(36) NOT NULL
         references participant (outid),
     place_placeid     serial
-        references place (placeid)
+        references place (placeid),
+    unique (subjectname, participant_outid)
 );
 
 CREATE TABLE participant_place
@@ -61,5 +62,13 @@ CREATE TABLE participant_place
     participant_outid character varying(36) NOT NULL
         references participant (outid),
     place_placeid     serial
-        references place (placeid)
+        references place (placeid),
+    unique (participant_outid, place_placeid)
+);
+
+CREATE TABLE place_type
+(
+    place_placeid serial unique
+        references place (placeid),
+    tertypename   ter
 );
