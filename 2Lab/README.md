@@ -4,7 +4,7 @@
 
 ### Requirements
 
-- ```docker-compose``` (tested on version 1.28.6)
+- ```docker-compose``` (tested on version 1.29.0)
 - ```docker``` engine (tested on version 20.10.5)
 
 ### Setting up the environment
@@ -25,11 +25,25 @@ Copy configurations if they were changed.
 
 Then go to this folder and move to Step 2.
 
-#### Step 2. ...:
-   
+> The volume **`postgres`** from the previous Laboratory work will be used to populate the new tables. If it is absent, the new DB will be empty.
 
-#### Step N. Run all services via:
+#### Step 2. Run all services via:
 
 ``` bash
 docker-compose -f docker-compouse.yaml up --build
 ```
+
+#### Result files will be in [`/output/`](./output/)
+
+Tip: to rebuild only 1 service you need to
+``` bash
+docker-compose -f docker-compouse.yaml up --detach --build {service-name}
+```
+
+#### Translated condition in [`TASK.md`](./TASK.md)
+
+#### ERD
+##### Logical ERD
+![Logical ERD](erd_logical.svg)
+##### Physical ERD
+![Logical ERD](erd_physical.svg)
