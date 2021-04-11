@@ -23,22 +23,18 @@ connection.autocommit = True
 @profile_time
 def get_min_phys_2019_2020(table_name) -> Tuple[Tuple[str, Decimal, Decimal], Tuple[psycopg2.extensions.Column]]:
     query = f"""
-    select res2019.regname  as "Область",
-           res2019.phys_min as "Фізика 2019 мінімум",
-           res2020.phys_min as "Фізика 2020 мінімум"
-    from (select regname, min(physball100) phys_min
-           from {table_name}
-           where {table_name}.physteststatus = 'Зараховано'
-             and {table_name}.year = 2019
-           group by {table_name}.regname) as res2019
-             join
-         (select regname, min(physball100) as phys_min
-          from {table_name}
-          where {table_name}.physteststatus = 'Зараховано'
-            and {table_name}.year = 2020
-          group by {table_name}.regname) as res2020
-         on res2019.regname = res2020.regname
-    order by "Область";
+    with results as
+             (select regname, year, min(ball100) as phys_min
+              from test
+                       join participant on participant.outid = test.outid
+                       join place on participant.placeid = place.placeid
+              where status = 'Зараховано'
+                and name = 'Фізика'
+              group by regname, year)
+    select r19.regname as "Область", r19.phys_min as "Фізика 2019 мінімум", r20.phys_min as "Фізика 2020 мінімум"
+    from (select regname, phys_min from results where year = 2019) as r19
+             join (select regname, phys_min from results where year = 2020) as r20
+                  on r19.regname = r20.regname;
     """
     with connection.cursor() as cursor:
         cursor.execute(query)
