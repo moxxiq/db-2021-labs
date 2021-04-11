@@ -1,4 +1,4 @@
-# Laboratory work 1 
+# Laboratory work 2
 
 ## Instalation guide
 
