@@ -30,4 +30,7 @@ services:
       - ./.env
 volumes:
     postgres:
+      #external: true
+      name: postgres
     pgadmin:
+      name: pgadmin
