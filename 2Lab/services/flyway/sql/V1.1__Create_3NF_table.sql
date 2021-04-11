@@ -1,4 +1,4 @@
-drop table if exists participant, place, eduplace, test, eo;
+drop table if exists eduplace_participant, participant, place, eduplace, test, eo;
 drop type if exists lang, teststatus cascade;
 
 CREATE TYPE lang AS ENUM (
@@ -26,23 +26,31 @@ CREATE TABLE eo
 
 CREATE TABLE eduplace
 (
-    eoid        serial references eo (eoid) primary key,
+    eduplaceid  serial primary key,
+    eoid        serial references eo (eoid),
     eotypename  text,
     eoparent    text,
-    tertypename ter
+    tertypename ter,
+    unique (eoid, eotypename, eoparent)
 );
 
 CREATE TABLE participant
 (
     outid            character varying(36) primary key,
     placeid          serial references place (placeid),
-    eduplaceid       serial references eduplace (eoid),
     birth            smallint NOT NULL,
     sextypename      sex      NOT NULL,
     regtypename      text     NOT NULL,
     classprofilename text,
     classlangname    lang,
     year             smallint NOT NULL
+);
+
+CREATE TABLE eduplace_participant
+(
+    eduplaceid  serial references eduplace (eduplaceid),
+    outid character varying(36) references participant (outid),
+    unique (eduplaceid, outid)
 );
 
 CREATE TABLE test
