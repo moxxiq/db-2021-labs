@@ -16,7 +16,13 @@ def to_csv(header, rows):
 
 @profile_time
 def main():
-    to_csv(*database.get_min_phys_2019_2020(table_name))
+    try:
+        to_csv(*database.get_min_phys_2019_2020(table_name))
+    except (database.interface_error, database.operational_error) as e:
+        print('Problem with database')
+        print(e)
+    else:
+        print('Queue executed, file saved')
 
 
 if __name__ == '__main__':
