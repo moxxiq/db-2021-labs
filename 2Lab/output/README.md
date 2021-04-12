@@ -8,6 +8,8 @@
 ### Time measurments
 `Succsessfully applied migrations to schema "public", now at version 1.2 (execution time 03:58.334s)`
 
+Python query time `Time 0.1777257 s`
+
 Relatively slow migration can be argued by necessity to fix area names that were including territory name. Nevertheless, it was obligatory to make at least 1NF.
 
 
