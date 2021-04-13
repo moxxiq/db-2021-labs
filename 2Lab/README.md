@@ -47,3 +47,6 @@ docker-compose -f docker-compouse.yaml up --detach --build {service-name}
 ![Logical ERD](erd_logical.svg)
 ##### Physical ERD
 ![Logical ERD](erd_physical.svg)
+
+Credits: Alana Thomas [Implementing Flyway with Docker
+](https://heavylion.medium.com/implementing-flyway-with-docker-8ae256ce634f)
