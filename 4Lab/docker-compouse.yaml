@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  db:
+    container_name: "${DATABASE_NETWORK}"
+    image: mongo
+    volumes:
+       - mongo:/data/mongo
+    env_file:
+      - ./.env
+    ports:
+      - "${DBPORT}:27017"
+  app:
+    container_name: python-app
+    build:
+      context: ./services/app
+      dockerfile: Dockerfile
+    command: python app.py
+    volumes:
+      - ./services/app/:/app/
+      - ./dataset/:/data/dataset/
+      - ./output/:/output/
+    env_file:
+      - ./.env
+volumes:
+    mongo:
+      #external: true
+      name: mongo
