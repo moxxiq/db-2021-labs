@@ -1,0 +1,15 @@
+
+drop_collection(collection_name=odata)
+Time 0.007617175 s
+
+insert_values(size=16384, collection_name=odata)
+Time 1.443004 s
+
+insert_values(size=16384, collection_name=odata)
+Time 1.425064 s
+
+get_min_phys_2019_2020()
+Time 0.02833654 s
+
+main()
+Time 2.905636 s

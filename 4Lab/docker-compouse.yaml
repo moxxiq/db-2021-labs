@@ -5,12 +5,14 @@ services:
     image: mongo
     volumes:
        - mongo:/data/mongo
+       - ./services/db/db:/data/db
+       - ./services/db/init/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     env_file:
       - ./.env
     ports:
       - "${DBPORT}:27017"
   app:
-    container_name: python-app
+    container_name: python-app-mongo
     build:
       context: ./services/app
       dockerfile: Dockerfile
